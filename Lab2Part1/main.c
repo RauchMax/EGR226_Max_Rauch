@@ -289,12 +289,14 @@ printf("test Col4 is %c\n", *Col4);
 */
 int i,test1=0,test2=0,test3=0,test4=0;
 
-char Letters[12] = {'K','N','R','O','Y','G','B','V','E','W','D','S'};
+char Letters12[12] = {'K','N','R','O','Y','G','B','V','E','W'};
+char Letters3[12] = {'K','N','R','O','Y','G','B','V','D','S'};
+char Letters4[12] = {'K','N','G','B','V','E','D','S'};
 
 do{
 for (i = 0; i<12; i++){
     //printf("test array[%d] = %c\n",i,Letters[i]);
-    if(*Col1 == Letters[i]){
+    if(*Col1 == Letters12[i]){
     test1 = 1;
     printf("working\n\n");
     }
@@ -309,7 +311,7 @@ if(test1 == 0){
 
 do{
 for (i = 0; i<12; i++){
-    if(*Col2 == Letters[i]){
+    if(*Col2 == Letters12[i]){
     test2 = 1;
     printf("working\n\n");
     }
@@ -324,7 +326,7 @@ if(test2 == 0){
 
 do{
 for (i = 0; i<12; i++){
-    if(*Col3 == Letters[i]){
+    if(*Col3 == Letters3[i]){
     test3 = 1;
     printf("working\n\n");
     }
@@ -339,7 +341,7 @@ if(test3 == 0){
 
 do{
 for (i = 0; i<12; i++){
-    if(*Col4 == Letters[i]){
+    if(*Col4 == Letters4[i]){
     test4 = 1;
     printf("working\n\n");
     }
