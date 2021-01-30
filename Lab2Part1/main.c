@@ -15,24 +15,25 @@
 
 void prompt(void);            //prototyping the functions
 int CalcResistorColors(int);
-void getColorBands(char*, char*, char*, char*);
+void getColorBands(char *Col1, char *Col2, char *Col3, char *Col4);
 void calcResistance(char, char, char, char);
 
 
 
 int main()
 {
-int status,exit;
-int Input;
+char color1,color2,color3,color4;
+int status,exit,check;
+int Input,decision;
 
 do{
 
 prompt();        //calling the prompt function to print and ask for input
 
-
+do{
  do{
 
-    status = scanf("%d", &Input);   //checking the input to see if it is a number
+    status = scanf("%d", &decision);   //checking the input to see if it is a number
     if (status == 0){     //i am checking this in the main because my function is
                                     //type int and cant accept a character
                                 //if it isn't a number the user is asked to renter
@@ -41,9 +42,44 @@ prompt();        //calling the prompt function to print and ask for input
     }
  }while(status == 0);         //if it is a number it is printed to the screen
 
-   printf("You entered %d\n",Input);
+   //printf("You entered %d\n",Input);
+if(decision == 1){
+check = 0;
+printf("Enter an integer between 1 and 99,000,000 for a color code.\n");
+do{
 
+    status = scanf("%d", &Input);   //checking the input to see if it is a number
+    if (status == 0){     //i am checking this in the main because my function is
+                                    //type int and cant accept a character
+                                //if it isn't a number the user is asked to renter
+        printf("ERROR: please enter a correct entry for an integer\n");
+        fflush(stdin);         //if incorrect this flushes the incorrect input
+    }
+ }while(status == 0);
 CalcResistorColors(Input);          //calling the resistor color function
+check = 0;
+}
+if(decision == 0){
+printf("Please enter four color characters.\n");
+scanf(" %c %c %c %c", &color1, &color2, &color3, &color4);
+//printf("character 1 is %c\n",color1);
+
+getColorBands(&color1, &color2, &color3, &color4);
+
+printf("character 1 after function is %c\n",color1);
+printf("character 2 after function is %c\n",color2);
+printf("character 3 after function is %c\n",color3);
+printf("character 4 after function is %c\n",color4);
+
+calcResistance(color1, color2, color3, color4);
+
+check = 0;
+}
+if(decision != 0 && decision != 1){
+printf("Enter 0 or 1\n");
+check = 1;
+}
+}while(check ==1);
 
 printf("Do you want to enter a new code? If yes enter 1, if no enter 0.\n");
 scanf("%d",&exit);             //checking to see if the user wants to try again
@@ -85,6 +121,7 @@ printf("--------------------Resistor Codes---------------------\n");
  printf("-------------------------------------------------------\n\n");
 
  printf("Would you like to convert a color-code to a resistance value or determine the color-code from a resistance value.\n");
+ printf("Enter 0 for color-code to a resistance value or 1 for determining the color-code from a resistance value.\n");
                  //printing the chart and asking for input
 return;
 }
@@ -239,3 +276,156 @@ else if ( color < 1 || color > 99000000){
 
 return;
     }
+
+
+
+void getColorBands(char *Col1, char *Col2, char *Col3, char *Col4){
+    /*
+printf("test Col1 is %c\n", *Col1);
+printf("test Col2 is %c\n", *Col2);
+printf("test Col3 is %c\n", *Col3);
+printf("test Col4 is %c\n", *Col4);
+*Col1 = 'K';
+*/
+int i,test1=0,test2=0,test3=0,test4=0;
+
+char Letters[12] = {'K','N','R','O','Y','G','B','V','E','W','D','S'};
+
+do{
+for (i = 0; i<12; i++){
+    //printf("test array[%d] = %c\n",i,Letters[i]);
+    if(*Col1 == Letters[i]){
+    test1 = 1;
+    printf("working\n\n");
+    }
+}
+if(test1 == 0){
+    printf("Please enter a valid character for color 1.\n");
+    scanf("%c",&*Col1);
+    printf("new Col1 is %c\n", *Col1);
+    test1 = 0;
+}
+}while(test1 == 0);
+
+do{
+for (i = 0; i<12; i++){
+    if(*Col2 == Letters[i]){
+    test2 = 1;
+    printf("working\n\n");
+    }
+}
+if(test2 == 0){
+    printf("Please enter a valid character for color 2.\n");
+    scanf("%c",&*Col2);
+    printf("new Col2 is %c\n", *Col2);
+    test2 = 0;
+}
+}while(test2 == 0);
+
+do{
+for (i = 0; i<12; i++){
+    if(*Col3 == Letters[i]){
+    test3 = 1;
+    printf("working\n\n");
+    }
+}
+if(test3 == 0){
+    printf("Please enter a valid character for color 3.\n");
+    scanf("%c",&*Col3);
+    printf("new Col3 is %c\n", *Col3);
+    test3 = 0;
+}
+}while(test3 == 0);
+
+do{
+for (i = 0; i<12; i++){
+    if(*Col4 == Letters[i]){
+    test4 = 1;
+    printf("working\n\n");
+    }
+}
+if(test4 == 0){
+    printf("Please enter a valid character for color 4.\n");
+    scanf("%c",&*Col4);
+    printf("new Col4 is %c\n", *Col4);
+    test4 = 0;
+}
+}while(test4 == 0);
+
+return;
+}
+
+
+void calcResistance(char Col1, char Col2, char Col3, char Col4){
+int i,j,k;
+char Letters[12] = {'K','N','R','O','Y','G','B','V','E','W','D','S'};
+int Numbers [12] = {0,1,2,3,4,5,6,7,8,9,0,0};
+int Mult[12] = {1,10,100,1000,10000,100000,1000000,10000000,1,1,.1,.01};
+printf("The resistor value is ");
+
+for(i=0; i<12; i++){
+    if(Col1 == Letters[i]){
+        printf("%d",Numbers[i]);
+    }
+}
+
+for(i=0; i<12; i++){
+    if(Col2 == Letters[i]){
+        //printf("%d",Numbers[i]);
+        j = i;
+    }
+}
+
+
+
+for(i=0; i<12; i++){
+    if(Col3 == Letters[i]){
+        printf("%d Ohms ",Numbers[j]*Mult[i]);
+    }
+}
+
+for(i=0; i<12; i++){
+    if(Col4 == Letters[i]){
+        k=i;
+    }
+}
+
+
+if(k==0){
+   printf("with a tolerance of +/- 1%%\n");
+}
+if(k==1){
+   printf("with a tolerance of +/- 2%%\n");
+}
+if(k==5){
+   printf("with a tolerance of +/- 0.5%%\n");
+}
+if(k==6){
+   printf("with a tolerance of +/- 0.25%%\n");
+}
+if(k==7){
+   printf("with a tolerance of +/- 0.1%%\n");
+}
+if(k==8){
+   printf("with a tolerance of +/- 0.05%%\n");
+}
+if(k==10){
+   printf("with a tolerance of +/- 5%%\n");
+}
+if(k==11){
+   printf("with a tolerance of +/- 10%%\n");
+}
+if(k==3){
+   printf("\n");
+}
+if(k==4){
+   printf("\n");
+}
+if(k==9){
+   printf("\n");
+}
+
+//printf("j = %d\n",j);
+
+return;
+}
