@@ -116,8 +116,8 @@ printf("--------------------Resistor Codes---------------------\n");
  printf("| V       | Violet| 7          |*10,000,000|+/- 0.1%% |\n");
  printf("| E       | Grey  | 8          |           |+/- 0.05%%|\n");
  printf("| W       | White | 9          |           |         |\n");
- printf("| D       | Gold  |            |           |+/- 5%%   |\n");
- printf("| S       | Silver|            |           |+/- 10%%  |\n");
+ printf("| D       | Gold  |            |*0.1       |+/- 5%%   |\n");
+ printf("| S       | Silver|            |*0.01      |+/- 10%%  |\n");
  printf("-------------------------------------------------------\n\n");
 
  printf("Would you like to convert a color-code to a resistance value or determine the color-code from a resistance value.\n");
