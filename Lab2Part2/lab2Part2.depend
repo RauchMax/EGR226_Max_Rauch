@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1611797034 source:w:\egr 226 lab\egr226_max_rauch\lab2part2\main.c
+	<stdio.h>
+	<stdlib.h>
+
