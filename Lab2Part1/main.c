@@ -303,6 +303,7 @@ for (i = 0; i<12; i++){
 }
 if(test1 == 0){
     printf("Please enter a valid character for color 1.\n");
+    fflush(stdin);
     scanf("%c",&*Col1);
     printf("new Col1 is %c\n", *Col1);
     test1 = 0;
@@ -318,6 +319,7 @@ for (i = 0; i<12; i++){
 }
 if(test2 == 0){
     printf("Please enter a valid character for color 2.\n");
+    fflush(stdin);
     scanf("%c",&*Col2);
     printf("new Col2 is %c\n", *Col2);
     test2 = 0;
@@ -333,6 +335,7 @@ for (i = 0; i<12; i++){
 }
 if(test3 == 0){
     printf("Please enter a valid character for color 3.\n");
+    fflush(stdin);
     scanf("%c",&*Col3);
     printf("new Col3 is %c\n", *Col3);
     test3 = 0;
@@ -348,6 +351,7 @@ for (i = 0; i<12; i++){
 }
 if(test4 == 0){
     printf("Please enter a valid character for color 4.\n");
+    fflush(stdin);
     scanf("%c",&*Col4);
     printf("new Col4 is %c\n", *Col4);
     test4 = 0;
