@@ -34,16 +34,15 @@ do{
  do{
 
     status = scanf("%d", &decision);   //checking the input to see if it is a number
-    if (status == 0){     //i am checking this in the main because my function is
-                                    //type int and cant accept a character
+    if (status == 0){
                                 //if it isn't a number the user is asked to renter
         printf("ERROR: please enter a correct entry for an integer\n");
         fflush(stdin);         //if incorrect this flushes the incorrect input
     }
- }while(status == 0);         //if it is a number it is printed to the screen
+ }while(status == 0);
 
    //printf("You entered %d\n",Input);
-if(decision == 1){
+if(decision == 1){  // checking to see if they chose option 1
 check = 0;
 printf("Enter an integer between 1 and 99,000,000 for a color code.\n");
 do{
@@ -59,27 +58,27 @@ do{
 CalcResistorColors(Input);          //calling the resistor color function
 check = 0;
 }
-if(decision == 0){
+if(decision == 0){ // checking to see if they chose option 0
 printf("Please enter four color characters.\n");
-scanf(" %c %c %c %c", &color1, &color2, &color3, &color4);
+scanf(" %c %c %c %c", &color1, &color2, &color3, &color4); //scanning the characters
 //printf("character 1 is %c\n",color1);
 
-getColorBands(&color1, &color2, &color3, &color4);
+getColorBands(&color1, &color2, &color3, &color4); //calling the getcolorband function
 
-printf("character 1 after function is %c\n",color1);
+printf("character 1 after function is %c\n",color1); //printing the characters after the function
 printf("character 2 after function is %c\n",color2);
 printf("character 3 after function is %c\n",color3);
 printf("character 4 after function is %c\n",color4);
 
-calcResistance(color1, color2, color3, color4);
+calcResistance(color1, color2, color3, color4);  // calling the calcResistor function
 
 check = 0;
 }
-if(decision != 0 && decision != 1){
+if(decision != 0 && decision != 1){ // checking to see if they entered a number other than 1 or 0
 printf("Enter 0 or 1\n");
 check = 1;
 }
-}while(check ==1);
+}while(check ==1); // running loop until valid input
 
 printf("Do you want to enter a new code? If yes enter 1, if no enter 0.\n");
 scanf("%d",&exit);             //checking to see if the user wants to try again
@@ -305,12 +304,15 @@ char Letters12[12] = {'K','N','R','O','Y','G','B','V','E','W'};
 char Letters3[12] = {'K','N','R','O','Y','G','B','V','D','S'};
 char Letters4[12] = {'K','N','G','B','V','E','D','S'};
 
+// creating arrays of the valid input for color 1,2
+//creating two more arrays of valid input for colors 3 and 4
+
 do{
 for (i = 0; i<12; i++){
     //printf("test array[%d] = %c\n",i,Letters[i]);
     if(*Col1 == Letters12[i]){
     test1 = 1;
-    printf("working\n\n");
+    printf("working\n\n"); //running through the array to see if color 1 matches any
     }
 }
 if(test1 == 0){
@@ -320,13 +322,13 @@ if(test1 == 0){
     printf("new Col1 is %c\n", *Col1);
     test1 = 0;
 }
-}while(test1 == 0);
-
+}while(test1 == 0); //if color 1 doesn't match asking for new input and scanning it in
+                    //doing this loop until there is valid input
 do{
 for (i = 0; i<12; i++){
     if(*Col2 == Letters12[i]){
     test2 = 1;
-    printf("working\n\n");
+    printf("working\n\n"); //running through the array to see if color 2 matches any
     }
 }
 if(test2 == 0){
@@ -336,13 +338,13 @@ if(test2 == 0){
     printf("new Col2 is %c\n", *Col2);
     test2 = 0;
 }
-}while(test2 == 0);
-
+}while(test2 == 0); //if color 2 doesn't match asking for new input and scanning it in
+                    //doing this loop until there is valid input
 do{
 for (i = 0; i<12; i++){
     if(*Col3 == Letters3[i]){
     test3 = 1;
-    printf("working\n\n");
+    printf("working\n\n"); //running through the array to see if color 3 matches any
     }
 }
 if(test3 == 0){
@@ -352,13 +354,13 @@ if(test3 == 0){
     printf("new Col3 is %c\n", *Col3);
     test3 = 0;
 }
-}while(test3 == 0);
-
+}while(test3 == 0); //if color 3 doesn't match asking for new input and scanning it in
+                    //doing this loop until there is valid input
 do{
 for (i = 0; i<12; i++){
     if(*Col4 == Letters4[i]){
     test4 = 1;
-    printf("working\n\n");
+    printf("working\n\n"); //running through the array to see if color 4 matches any
     }
 }
 if(test4 == 0){
@@ -368,8 +370,8 @@ if(test4 == 0){
     printf("new Col4 is %c\n", *Col4);
     test4 = 0;
 }
-}while(test4 == 0);
-
+}while(test4 == 0); //if color 4 doesn't match asking for new input and scanning it in
+                    //doing this loop until there is valid input
 return;
 }
 
@@ -390,38 +392,42 @@ return;
 void calcResistance(char Col1, char Col2, char Col3, char Col4){
 int i,j,k;
 char Letters[12] = {'K','N','R','O','Y','G','B','V','E','W','D','S'};
+//made array of all posible characters
 int Numbers [12] = {0,1,2,3,4,5,6,7,8,9,0,0};
+//made an array of the numbers
 int Mult[12] = {1,10,100,1000,10000,100000,1000000,10000000,1,1,.1,.01};
+//made an array of the multipliers
+
 printf("The resistor value is ");
 
-for(i=0; i<12; i++){
+for(i=0; i<12; i++){ //checking to see when color 1 matches a letter
     if(Col1 == Letters[i]){
-        printf("%d",Numbers[i]);
+        printf("%d",Numbers[i]); //when it matches it prints that number
     }
 }
 
-for(i=0; i<12; i++){
+for(i=0; i<12; i++){ //checking to see when color 2 matches a letter
     if(Col2 == Letters[i]){
         //printf("%d",Numbers[i]);
         j = i;
-    }
+    }  //when it matches it sets j equal to i to save that location in the array
 }
 
 
 
-for(i=0; i<12; i++){
+for(i=0; i<12; i++){ //checking to see when color 3 matches a letter
     if(Col3 == Letters[i]){
         printf("%d Ohms ",Numbers[j]*Mult[i]);
     }
-}
+} //when it matches it prints the number that matched color 2 times the multiplier of color 3
 
-for(i=0; i<12; i++){
+for(i=0; i<12; i++){  //checking to see when color 4 matches a letter
     if(Col4 == Letters[i]){
         k=i;
-    }
+    }  //when it matches it sets k equal to i to save that location in the array
 }
 
-
+//checking to see what k is equal to and printing the corresponding tolerance
 if(k==0){
    printf("with a tolerance of +/- 1%%\n");
 }
