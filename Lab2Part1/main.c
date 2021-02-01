@@ -279,6 +279,18 @@ return;
 
 
 
+/****| GetColorBandsFunction | *****************************************
+* Brief: This function takes 4 pointers to characters as parameters. This
+* function compares each character to an array of characters to see if it
+* is valid. It asks for new input if a character is invalid. It scans in
+* the new input and prints it to the screen. Since  these are called by
+* reference this function can “return” all 4 values of user input in one
+* function call.
+* param:
+* data: 4 painters to characters
+* return: N/A prints from function
+*************************************************************/
+
 void getColorBands(char *Col1, char *Col2, char *Col3, char *Col4){
     /*
 printf("test Col1 is %c\n", *Col1);
@@ -361,6 +373,19 @@ if(test4 == 0){
 return;
 }
 
+
+/****| calcResistanceFunction | *****************************************
+* Brief: This function takes 4 characters as parameters. This
+* function compares each character to an array of characters. When there is
+* a match it prints the corresponding number for the first character. When
+* the second character matches it saves the spot in the array as j. When
+* the third character matches it prints the jth number times the ith multiplier.
+* The forth character is used to find the corresponding tolerance, and the whole
+* resistance and tolerance are printed to the screen.
+* param:
+* data: 4 characters
+* return: N/A prints from function
+*************************************************************/
 
 void calcResistance(char Col1, char Col2, char Col3, char Col4){
 int i,j,k;
