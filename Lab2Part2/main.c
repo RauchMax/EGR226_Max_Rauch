@@ -10,14 +10,6 @@ int pages;
 int year_published;
 };
 
-/*
-struct author{
-char word1[50];
-char word2[50];
-char word3[50];
-char word4[50];
-};
-*/
 
 int parse_file(char filename[], struct book book_array[]);
 void print_book(struct book book_array[], int j);
@@ -34,7 +26,10 @@ char title[50];
 char author[50];
 char ISBN[50];
 struct book bookarray[360];
-//struct author authorarray[10];
+
+printf("Enter the file name.\n");
+scanf("%s", &filename);
+//printf("File: %s\n", filename);
 
 do{
 do{
@@ -118,7 +113,7 @@ printf("Exiting, have a nice day.\n");
 * (int) parse status, 1 if successful, 0 otherwise.
 *---------------------------------------------------------*/
 int parse_file(char filename[], struct book book_array[]) {
- FILE* infile = fopen("Books.txt", "r"); // Attempt to open file
+ FILE* infile = fopen(filename, "r"); // Attempt to open file
  if (infile == NULL) // Return 0 (failure) if file could not open
  return 0;
 
@@ -179,6 +174,7 @@ printf("The Year is %d\n\n",book_array[j].year_published);
 void search_title (struct book book_array[], int num, char search_title[] ){
 
 int i,comp=1;
+char* p;
 
 
 int len = strlen(search_title);
@@ -189,10 +185,20 @@ if(len > 0 && search_title[len-1] == '\n'){
 }
 
 
-
+/*
 for(i=0; i<num; i++){
     comp = strcmp(search_title, book_array[i].title);
 if(comp == 0){
+    printf("Matched Title\n");
+    print_book(book_array,i);
+}
+}
+*/
+
+for(i=0; i<num; i++){
+p = strstr(book_array[i].title,search_title);
+
+if(p){
     printf("Matched Title\n");
     print_book(book_array,i);
 }
@@ -222,6 +228,7 @@ return;
 void search_author (struct book book_array[], int num, char search_author[]){
 
 int i,comp=1;
+char* l;
 
 
 int len = strlen(search_author);
@@ -231,7 +238,7 @@ if(len > 0 && search_author[len-1] == '\n'){
     search_author[len-1] = '\0';
 }
 
-
+/*
 for(i=0; i<num; i++){
     comp = strcmp(search_author, book_array[i].author_name);
 if(comp == 0){
@@ -239,12 +246,16 @@ if(comp == 0){
     print_book(book_array,i);
 }
 }
-
-/*
-char * ptr = strtok(buffer," "); // Parse string by space
- if(strcmp(ptr,"N/A")) // Validate string
- strcpy(book_array[i].title,ptr);// First parse is title
 */
+
+for(i=0; i<num; i++){
+l = strstr(book_array[i].author_name,search_author);
+
+if(l){
+    printf("Matched Author\n");
+    print_book(book_array,i);
+}
+}
 
 return;
 }
