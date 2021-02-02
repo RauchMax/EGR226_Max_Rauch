@@ -1,3 +1,16 @@
+/**************************************************************************************
+* Author: Max Rauch
+* Course: EGR 226 - 902
+* Date: 02/1/2021
+* Project: Lab Two Part Two
+* File: Main.c
+* Description: This is a program that works as a search engine for a database of books
+* The user decides on what file name to input then on how they would like to search.
+* After they choose a search method their input is scanned and compared to all of the
+* books in the data base. If there is a match the book and all of its information is
+* printed to the screen. The user is then asked if they want to search again.
+**************************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -112,6 +125,7 @@ printf("Exiting, have a nice day.\n");
 * Outputs:
 * (int) parse status, 1 if successful, 0 otherwise.
 *---------------------------------------------------------*/
+
 int parse_file(char filename[], struct book book_array[]) {
  FILE* infile = fopen(filename, "r"); // Attempt to open file
  if (infile == NULL) // Return 0 (failure) if file could not open

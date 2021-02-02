@@ -2,12 +2,13 @@
 * Author: Max Rauch
 * Course: EGR 226 - 902
 * Date: 01/18/2021
-* Project: Lab One Part One
+* Project: Lab Two Part One
 * File: Main.c
 * Description: This is a program that prints out the color code of a resistor
-* based on the entered number code that is entered. The program will then ask
-* the user if they would like to add another number code or be done. If an invalid
-* code is entered the program will catch it and ask for another entry.
+* of the resistance of a resistor based on the entered number code or color code
+* that is entered. The program will then ask the user if they would like to add
+* another number code or be done. If an invalid code is entered the program will
+* catch it and ask for another entry.
 **************************************************************************************/
 
 #include <stdio.h>
