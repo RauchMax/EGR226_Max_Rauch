@@ -182,7 +182,8 @@ printf("The Year is %d\n\n",book_array[j].year_published);
 * that string to every book title in the array. If there is a match it
 * calls the print_book function.
 * param:
-* data: a structure array, an int and a string
+* data: structure array of all books, int of number of books
+*  and a string of the user input
 * return: N/A prints from function
 *************************************************************/
 
@@ -219,7 +220,8 @@ return;
 * It compares the string to every books ISBN number in the array.
 * If there is a match it calls the print_book function.
 * param:
-* data: a structure array, an int and a string
+* data: structure array of all books, int of number of books
+*  and a string of the user input
 * return: N/A prints from function
 *************************************************************/
 
@@ -244,7 +246,8 @@ return;
 * that string to every book author in the array. If there is a match it
 * calls the print_book function.
 * param:
-* data: a structure array, an int and a string
+* data: structure array of all books, int of number of books
+*  and a string of the user input
 * return: N/A prints from function
 *************************************************************/
 
