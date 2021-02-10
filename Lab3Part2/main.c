@@ -1,3 +1,14 @@
+/**************************************************************************************
+* Author: Max Rauch
+* Course: EGR 226 - 902
+* Date: 02/3/2021
+* Project: Lab Three Part Three
+* File: Main.c
+* Description: This program makes the red LED on the MSP432
+* flash at a variable rate. The user can decide the rate.
+**************************************************************************************/
+
+
 #include "msp.h"
 
 
@@ -14,11 +25,10 @@ void main(void)
 	P1->DIR = BIT0;
 
 	//Temporary variable for for loop maintenance
-	int i,j;
-	//scanf("%d", &j);
+	int i;
 	while(1){
 	    P1->OUT ^= BIT0;      //toggle LED status
-	    for(i=j; i>0; i--);  //Crude delay
+	    for(i=2000; i>0; i--);  //Crude delay
 	}
 
 }
