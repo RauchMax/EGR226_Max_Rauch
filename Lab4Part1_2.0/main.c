@@ -37,12 +37,13 @@ void main(void)
     P2->OUT &= ~BIT2; // turn all three LEDs on
 
 
+
     while(1)
     {
         int pin_Value = 0; //initialize variable as low
         int color=0;
 
-        for(color=1; color<5; color++)
+        for(color=2; color<5; color++)
         {
         if(color==4){
             color =1;

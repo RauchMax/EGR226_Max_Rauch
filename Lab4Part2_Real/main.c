@@ -25,13 +25,6 @@ int main(void)
         { __delay_cycles(3000); //pause for 10 m-sec for switch bounce
         if ((P1IN & BIT1) == 0x00) //check of button is still pushed
         {
-            if ((P1IN & BIT1) == 0x00) //check of button pushed
-                    { __delay_cycles(3000); //pause for 10 m-sec for switch bounce
-                    if ((P1IN & BIT1) == 0x00) //check of button is still pushed
-                    {
-                        while((P1IN & BIT1) == 0x00);
-                    }
-                    }
         if(counter ==3){
             counter =4;
         }
@@ -39,15 +32,19 @@ int main(void)
             counter = 1;
         }
         P2->OUT = counter & 7;
-        delayMs(500);
+        //delayMs(1000);
+        __delay_cycles(3000000);
         counter++;
         }
     }
 }
 }
+
+/*
 void delayMs(int n){
     int i,j;
 
     for (j=0; j<n; j++)
-        for(i=250; i >0; i--);
+        for(i=300; i >0; i--);
 }
+*/
