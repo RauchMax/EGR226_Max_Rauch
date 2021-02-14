@@ -1,3 +1,15 @@
+/**************************************************************************************
+* Author: Max Rauch
+* Course: EGR 226 - 902
+* Date: 02/14/2021
+* Project: Lab Four Part One
+* File: Main.c
+* Description: This program makes the RGB LED on the MSP432
+* cycle to the next color with the push of the pushbutton switch.
+* This program will not cycle through the colors if the button is
+* held down, and if the MSP432 is restarted it will start with red.
+**************************************************************************************/
+
 #include "msp.h"
 
 void delayMs(int n);
