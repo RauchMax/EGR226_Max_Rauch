@@ -12,7 +12,7 @@ uint8_t num, pressed;
 char Pin[10];
 char Code[10];
 int counter = 0;
-int n=0;
+int n=0,j=0;
 int check = 1;
 
 
@@ -23,13 +23,20 @@ void main(void)
 
     printf("Please enter a four digit code.\n");
 
-    while(check ==1){
-    findpin();
-    }
+    //while(check ==1){
+    //findpin();
+    //}
 
     while ( 1 )
     {
-    checkpin();
+        if (check ==1){
+            findpin();
+        }
+        if (check == 0){
+            checkpin();
+        }
+
+    //checkpin();
 
     }
 }
@@ -42,8 +49,8 @@ void findpin(void){
 
 
             if(num == 12){
-                if(n<4){
-                    printf("Please enter a 4 digit code\n");
+                if(counter<4){
+                    printf("Please reenter a 4 digit code\n");
                     Code[n-4] = 0;
                     Code[n-3] = 0;
                     Code[n-2] = 0;
@@ -51,21 +58,34 @@ void findpin(void){
 
                 }
 
-                          strcpy(Pin, Code);
-                         // printf(" Code = %d %d %d %d\n", Code[n-4], Code[n-3], Code[n-2], Code[n-1]);
-                          //printf(" Pin = %d %d %d %d\n", Pin[n-4], Pin[n-3], Pin[n-2], Pin[n-1]);
-                          printf("Please enter the pin again\n");
-                          n=0;
-                          check = 0;
+                          //strcpy(Pin, Code);
+                          printf(" Code = %d %d %d %d\n", Code[n-4], Code[n-3], Code[n-2], Code[n-1]);
+                          printf(" Pin = %d %d %d %d\n", Pin[j-4], Pin[j-3], Pin[j-2], Pin[j-1]);
+                          //printf("Please enter the pin again\n");
+                          //n=0;
+                          counter = 0;
+                          //if((Code[n-4] == 0) && (Code[n-3] == 0) && (Code[n-2] == 0) && (Code[n-1] == 0)){
+                          if((Code[n-4] == Code[n-3] == Code[n-2] == Code[n-1]) == 1){
+                              strcpy(Pin, Code);
+                              printf(" Code = %d %d %d %d\n", Code[n-4], Code[n-3], Code[n-2], Code[n-1]);
+                              printf(" Pin = %d %d %d %d\n", Pin[j-4], Pin[j-3], Pin[j-2], Pin[j-1]);
+                              printf("Please enter the pin again\n");
+                              n=0;
+                              j=0;
+                              check = 0;
+                          }
+                         // check = 0;
                   }
             if(num<10){
                 Code[n] = num;
-                counter ++;
+                counter++;
+                j++;
                 n++;
             }
             if(num == 11){
                 Code[n] = 0;
-                counter ++;
+                counter++;
+                j++;
                 n++;
             }
         Print_Keys ( );
@@ -93,25 +113,33 @@ void checkpin(void){
 
                 }
 
+                printf(" Code = %d %d %d %d\n", Code[n-4], Code[n-3], Code[n-2], Code[n-1]);
+                printf(" Pin = %d %d %d %d\n", Pin[j-4], Pin[j-3], Pin[j-2], Pin[j-1]);
+
                           //strcpy(Pin, Code);
-                if ( strcmp (Pin, Code ) == 0 ){
+               // if ( strcmp (Pin, Code) == 0 ){
+                if(Pin[j-1] == Code[n-1]){
                     printf("Entries were identical\n");
                 }
-                if ( strcmp (Pin, Code ) == 1 ){
+                //if ( strcmp (Pin, Code ) == 1 ){
+                if(Pin[j-1] != Code[n-1]){
                     printf("Entries were not identical\n");
                 }
                          // printf(" Code = %d %d %d %d\n", Code[n-4], Code[n-3], Code[n-2], Code[n-1]);
                           //printf(" Pin = %d %d %d %d\n", Pin[n-4], Pin[n-3], Pin[n-2], Pin[n-1]);
                           n=0;
+                          //j=0;
                   }
             if(num<10){
                 Code[n] = num;
-                counter ++;
+                counter++;
+                j++;
                 n++;
             }
             if(num == 11){
                 Code[n] = 0;
-                counter ++;
+                counter++;
+                j++;
                 n++;
             }
         Print_Keys ( );

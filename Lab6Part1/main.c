@@ -34,7 +34,7 @@ void keypad_init (void)
              SysTick -> CTRL = 0x00000005; // enable systic, 3MHz, No Interrupts
 
              P4SEL0 &= ~0x0F;
-             P4SEL1 &= ~0x0F;  //  configure P3.0  GPIO
+             P4SEL1 &= ~0x0F;  //  configure P4.0 -4.6  GPIO
              P4DIR &= ~0x0F;   //  make P3.0 input
              P4REN |= 0x0F;    //  enable pull resistors on P3.0
              P4OUT |= 0x0F;   // P3.0 is a pull-up
@@ -77,20 +77,22 @@ if (row == 0x07) num = 9 + col+1; // key in row 3
 return 1;
 }
 
+//We were given the read keypad code in lecture.
+
 
 void Print_Keys (void)
 {
-        if(num < 10 ){
+        if(num < 10 ){           //if its 1-9 just print it
             printf("%d\n", num);
     }
 
-    if(num == 10){
+    if(num == 10){             //if its 10 print the *
         printf("*\n");
     }
-    if(num == 11){
+    if(num == 11){            // if its 11 print 0
         printf("0\n");
     }
-    if(num == 12){
+    if(num == 12){            // if its 12 print #
             printf("#\n");
     }
 
