@@ -1,8 +1,21 @@
+/**************************************************************************************
+* Author: Max Rauch
+* Course: EGR 226 - 902
+* Date: 03/2/2021
+* Project: Lab Six Part One
+* File: Main.c
+* Description: This program reads a standard twelve key keypad
+* and prints the number or symbol that is pressed to the screen.
+* The program prints one number or one symbol at a time, and
+* it only prints one number or symbol per press. It will not
+* print multiple numbers if the button is held down.
+**************************************************************************************/
+
 #include "msp.h"
 #include <stdio.h>
 
 void keypad_init (void); // prototype for GPIO initialization
-uint8_t  Keypad_Read(void); // prototype for keypad scan subroutine
+uint8_t  Keypad_Read(void); // prototype for keypad scan function
 void Print_Keys (void); // Print Key pressed
 void SysTick_delay (uint16_t delay);   // prototyping the systick function
 uint8_t num, pressed;
@@ -11,14 +24,15 @@ uint8_t num, pressed;
 void main(void)
 {
 	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
-	keypad_init ( );
+	keypad_init ( );                      //calling keypad function
 
 	while ( 1 )
 	{
 	pressed =  Keypad_Read(); // Call Function to read Keypad
-	if ( pressed )
+	if ( pressed )          //checking button state
 	Print_Keys ( );
-	__delay_cycles(30000); // 10ms delay through the loop before reading keypad again
+	SysTick_delay (10);    // 10ms delay through the loop before reading keypad again
+	//__delay_cycles(30000);
 	}
 
 
@@ -27,21 +41,21 @@ void main(void)
 
 void keypad_init (void)
 {
-                            //initialization of systic timer
+                                   //initialization of systic timer
              SysTick -> CTRL = 0; // disable SysTick During step
              SysTick -> LOAD = 0x00FFFFFF; // max reload value
              SysTick -> VAL = 0; // any write to current clears it
              SysTick -> CTRL = 0x00000005; // enable systic, 3MHz, No Interrupts
 
              P4SEL0 &= ~0x0F;
-             P4SEL1 &= ~0x0F;  //  configure P4.0 -4.6  GPIO
-             P4DIR &= ~0x0F;   //  make P3.0 input
-             P4REN |= 0x0F;    //  enable pull resistors on P3.0
-             P4OUT |= 0x0F;   // P3.0 is a pull-up
+             P4SEL1 &= ~0x0F;  //  configure P4.0 -4.3  GPIO
+             P4DIR &= ~0x0F;   //  make P4.0 -4.3 input
+             P4REN |= 0x0F;    //  enable pull resistors on P4.0 -4.3
+             P4OUT |= 0x0F;   // P4.0 -4.3 are a pull-up
 
              P4SEL0 &= ~0x70;
-             P4SEL1 &= ~0x70;  //  configure P3.0  GPIO
-             P4DIR  &= ~0x70;   //  make P3.0 input
+             P4SEL1 &= ~0x70;  //  configure P4.4 -4.6  GPIO
+             P4DIR  &= ~0x70;   //  make P4.0 -4.3 input
 
 
 
