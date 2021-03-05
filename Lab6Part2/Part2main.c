@@ -31,7 +31,7 @@ void main(void)
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;     // stop watchdog timer
     keypad_init ( );                            //initializing the keypad
 
-    printf("Please enter a four digit code.\n");
+    printf("Please enter a four digit code followed by #.\n");
 
 
 
