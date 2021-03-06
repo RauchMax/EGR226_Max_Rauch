@@ -33,7 +33,7 @@ void commandWrite(uint8_t command);    // Writing one byte of command by calling
 void dataWrite(uint8_t data);           // Writing one byte of DATA by calling the
                                           // pushByte() function with the
                                          //data parameter
-char name[20] = {'M','a','x','R','a','u','c','h','E','G','R','2','2','6'};
+char string[20] = {'L','A','B','O','R','A','T','O','R','Y',' ','O','V','E','R'};
 
 
 void main(void)
@@ -59,33 +59,30 @@ void main(void)
     SysTick_Init ();
     LCD_init();
 
-    int i=0;
+    int i=0,j=1;
+    char n=14;
 
 
-    commandWrite(0x86);
+    commandWrite(0x80);
     delay_micro(100);
 
 
+
     while(1){
-        dataWrite(name[i]);
-        delay_ms(10);
-        if(i==2){
-            commandWrite(0xC5);
+        if(i>14){
+            i=j;
+            j++;
+
+            commandWrite(0x8E);
+            delay_micro(100);
+            dataWrite(0x20);
+            commandWrite(0x80);
             delay_micro(100);
         }
-        if(i==7){
-            commandWrite(0x96);
-            delay_micro(100);
-        }
-        if(i==10){
-            commandWrite(0xD6);
-            delay_micro(100);
-        }
-        if(i>12){
-            commandWrite(0x86);
-            delay_micro(100);
-            i=-1;
-        }
+        dataWrite(string[i]);
+        delay_ms(1000);
+
+
         i++;
     }
 }
