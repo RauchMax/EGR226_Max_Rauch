@@ -59,8 +59,8 @@ void main(void)
     SysTick_Init ();
     LCD_init();
 
-    int i=0,j=1;
-    //char n=14;
+    int i=0,j=0,a=0,m=0,k=0;
+    int n = 144;
 
 
     commandWrite(0x80);
@@ -69,23 +69,63 @@ void main(void)
 
 
     while(1){
+
+if(m==0){
+
         if(i>14){
             i=j;
             j++;
+            //m++;
 
-           // commandWrite(0x8E);
-           // delay_micro(100);
-            //dataWrite(0x20);
+            delay_ms(700);
             commandWrite(0x80);
             delay_micro(100);
+            //LCD_init();
+            commandWrite(0x01);
+           // delay_micro(100);
 
         }
         dataWrite(string[i]);
-        delay_ms(100);
-
+        delay_ms(10);
 
         i++;
+
+        if(j>14){
+            m=1;
+            a=0;
+            k=0;
+            n=144;
+        }
+
+}
+
+if(m==1){
+
+        if(k >= a){
+            k=0;
+            a++;
+            //m++;
+            n--;
+            delay_ms(700);
+            commandWrite(n);
+            delay_micro(100);
+
+        }
+
+        dataWrite(string[k]);
+        delay_ms(10);
+        k++;
+
+        if(a>15){
+            m=0;
+            j=0;
+            i=0;
+            commandWrite(0x80);
+            delay_micro(100);
+            //commandWrite(0x01);
+        }
     }
+  }
 }
 
 
