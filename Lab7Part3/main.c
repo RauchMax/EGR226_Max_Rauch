@@ -2,7 +2,6 @@
 * Author: Max Rauch
 * Course: EGR 226 - 902
 * Date: 03/2/2021
-* Project: Lab Seven Part One
 * File: Main.c
 * Description: This program reads a standard twelve key keypad
 * and prints a four digit code to the screen with the press of
@@ -33,8 +32,12 @@ void commandWrite(uint8_t command);    // Writing one byte of command by calling
 void dataWrite(uint8_t data);           // Writing one byte of DATA by calling the
                                           // pushByte() function with the
                                          //data parameter
-char string[20] = {'L','A','B','O','R','A','T','O','R','Y',' ','O','V','E','R'};
 
+void Scroll(void);
+
+char string[20] = {'L','A','B','O','R','A','T','O','R','Y',' ','O','V','E','R'};
+int i=0,j=0,a=0,m=0,k=0;
+int n = 144;
 
 void main(void)
 {
@@ -59,8 +62,8 @@ void main(void)
     SysTick_Init ();
     LCD_init();
 
-    int i=0,j=0,a=0,m=0,k=0;
-    int n = 144;
+    //int i=0,j=0,a=0,m=0,k=0;
+    //int n = 144;
 
 
     commandWrite(0x80);
@@ -70,65 +73,68 @@ void main(void)
 
     while(1){
 
-if(m==0){
-
-        if(i>14){
-            i=j;
-            j++;
-            //m++;
-
-            delay_ms(700);
-            commandWrite(0x80);
-            delay_micro(100);
-            //LCD_init();
-            commandWrite(0x01);
-           // delay_micro(100);
-
-        }
-        dataWrite(string[i]);
-        delay_ms(10);
-
-        i++;
-
-        if(j>14){
-            m=1;
-            a=0;
-            k=0;
-            n=144;
-        }
-
+        Scroll();
+      }
 }
 
-if(m==1){
+void Scroll(void){
 
-        if(k >= a){
-            k=0;
-            a++;
-            //m++;
-            n--;
-            delay_ms(700);
-            commandWrite(n);
-            delay_micro(100);
+    if(m==0){
 
-        }
+            if(i>14){
+                i=j;
+                j++;
+                //m++;
 
-        dataWrite(string[k]);
-        delay_ms(10);
-        k++;
+                delay_ms(700);
+                commandWrite(0x80);
+                delay_micro(100);
+                //LCD_init();
+                commandWrite(0x01);
+               // delay_micro(100);
 
-        if(a>15){
-            m=0;
-            j=0;
-            i=0;
-            commandWrite(0x80);
-            delay_micro(100);
-            //commandWrite(0x01);
-        }
+            }
+            dataWrite(string[i]);
+            delay_ms(10);
+
+            i++;
+
+            if(j>14){
+                m=1;
+                a=0;
+                k=0;
+                n=144;
+            }
+
     }
-  }
+
+    if(m==1){
+
+            if(k >= a){
+                k=0;
+                a++;
+                //m++;
+                n--;
+                delay_ms(700);
+                commandWrite(n);
+                delay_micro(100);
+
+            }
+
+            dataWrite(string[k]);
+            delay_ms(10);
+            k++;
+
+            if(a>15){
+                m=0;
+                j=0;
+                i=0;
+                commandWrite(0x80);
+                delay_micro(100);
+
+            }
+        }
 }
-
-
 
 void LCD_init(void){
 

@@ -38,19 +38,27 @@ void dataWrite(uint8_t data);           // Writing one byte of DATA by calling t
 void main(void)
 {
 	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
-	SysTick_Init ();
-	LCD_init();
 
-	 P3SEL0 &= ~0x06;
-	 P3SEL1 &= ~0x06;  //  configure P4.2 & 4.3  GPIO
-	 P3DIR |= 0x06;   //  make P4.2 & 4.3 output
-	 P3OUT &= ~0x06;
+
+
+	 P2SEL0 &= ~0x30;
+	 P2SEL1 &= ~0x30;  //  configure P4.2 & 4.3  GPIO
+	 P2DIR |= 0x30;   //  make P4.2 & 4.3 output
+	 P2OUT &= ~0x30;
 
 	 P4SEL0 &= ~0xF0;
 	 P4SEL1 &= ~0xF0;  //  configure P4.2 & 4.3  GPIO
 	 P4DIR |= 0xF0;   //  make P4.2 & 4.3 output
 	 P4OUT &= ~0xF0;
 
+	 SysTick_Init ();
+	 LCD_init();
+
+
+	 commandWrite(0x01);
+	 delay_micro(100);
+	 commandWrite(0x80);
+	 delay_micro(100);
 
 	while(1){
 
@@ -116,11 +124,11 @@ while((SysTick -> CTRL & 0x00010000) == 0);
 
 void PulseEnablePin (void)
 {
-P3OUT &=~BIT2; // make sure pulse starts out at 0V
+P2OUT &=~BIT5; // make sure pulse starts out at 0V
 delay_micro(10);
-P3OUT |=BIT2;
+P2OUT |=BIT5;
 delay_micro(10);
-P3OUT &=~BIT2;
+P2OUT &=~BIT5;
 delay_micro(10);
 }
 
@@ -148,13 +156,13 @@ delay_micro(100);
 
 
 void commandWrite(uint8_t command){
-    P3OUT &= ~BIT3;
+    P2OUT &= ~BIT4;
     pushByte (command);
 }
 
 
 
 void dataWrite(uint8_t data){
-    P3OUT &= ~BIT3;
+    P2OUT |= BIT4;
     pushByte (data);
 }

@@ -2,7 +2,7 @@
 * Author: Max Rauch
 * Course: EGR 226 - 902
 * Date: 03/2/2021
-* Project: Lab Seven Part One
+* Project: Lab Seven Part Two
 * File: Main.c
 * Description: This program reads a standard twelve key keypad
 * and prints a four digit code to the screen with the press of
