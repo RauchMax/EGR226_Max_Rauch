@@ -60,7 +60,7 @@ void main(void)
     LCD_init();
 
     int i=0,j=1;
-    char n=14;
+    //char n=14;
 
 
     commandWrite(0x80);
@@ -73,14 +73,15 @@ void main(void)
             i=j;
             j++;
 
-            commandWrite(0x8E);
-            delay_micro(100);
-            dataWrite(0x20);
+           // commandWrite(0x8E);
+           // delay_micro(100);
+            //dataWrite(0x20);
             commandWrite(0x80);
             delay_micro(100);
+
         }
         dataWrite(string[i]);
-        delay_ms(1000);
+        delay_ms(100);
 
 
         i++;
