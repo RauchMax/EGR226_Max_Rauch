@@ -42,22 +42,22 @@ void main(void)
 
 
 	 P2SEL0 &= ~0x30;
-	 P2SEL1 &= ~0x30;  //  configure P4.2 & 4.3  GPIO
-	 P2DIR |= 0x30;   //  make P4.2 & 4.3 output
+	 P2SEL1 &= ~0x30;  //  configure P2.4 & P2.5  GPIO
+	 P2DIR |= 0x30;   //  make P2.4 & P2.5 output
 	 P2OUT &= ~0x30;
 
 	 P4SEL0 &= ~0xF0;
-	 P4SEL1 &= ~0xF0;  //  configure P4.2 & 4.3  GPIO
-	 P4DIR |= 0xF0;   //  make P4.2 & 4.3 output
-	 P4OUT &= ~0xF0;
+	 P4SEL1 &= ~0xF0;  //  configure P4.4 & P4.7  GPIO
+	 P4DIR |= 0xF0;   //  make P4.4 & P4.7 output
+	 P4OUT &= ~0xF0;  // set P4.4 & P4.7 to 0
 
-	 SysTick_Init ();
-	 LCD_init();
+	 SysTick_Init ();   //initializing systick
+	 LCD_init();        //initializing LCD
 
 
-	 commandWrite(0x01);
+	 commandWrite(0x01);   //clearing the screen
 	 delay_micro(100);
-	 commandWrite(0x80);
+	 commandWrite(0x80);    //setting cursor to first cell
 	 delay_micro(100);
 
 	while(1){
@@ -67,7 +67,7 @@ void main(void)
 
 
 
-void LCD_init(void){
+void LCD_init(void){      //following the start up sequence
 
      commandWrite(3);
      delay_ms(100);
@@ -124,11 +124,11 @@ while((SysTick -> CTRL & 0x00010000) == 0);
 
 void PulseEnablePin (void)
 {
-P2OUT &=~BIT5; // make sure pulse starts out at 0V
+P2OUT &=~BIT5;        // make sure pulse starts out at 0V
 delay_micro(10);
-P2OUT |=BIT5;
+P2OUT |=BIT5;        //pulse high
 delay_micro(10);
-P2OUT &=~BIT5;
+P2OUT &=~BIT5;       //set back to low
 delay_micro(10);
 }
 
@@ -136,9 +136,9 @@ delay_micro(10);
 
 void pushNibble (uint8_t nibble)
 {
-P4OUT &=~0xF0;                 // clear P4.4-P4.7
-P4OUT |= (nibble & 0x0F) << 4; // port pins P4.4 - P4.7 wired to D4 - D7
-PulseEnablePin();
+P4OUT &=~0xF0;                   // clear P4.4-P4.7
+P4OUT |= (nibble & 0x0F) << 4;   // port pins P4.4 - P4.7 wired to D4 - D7
+PulseEnablePin();               // pulse the E pin
 }
 
 
@@ -146,23 +146,23 @@ PulseEnablePin();
 void pushByte (uint8_t byte)
 {
 uint8_t nibble;
-nibble = (byte & 0xF0) >> 4;
-pushNibble(nibble);
-nibble = byte & 0x0F;
-pushNibble(nibble);
+nibble = (byte & 0xF0) >> 4;    //shift bits over 4
+pushNibble(nibble);             //give this value to pushNibble
+nibble = byte & 0x0F;          // clear bytes 4-7
+pushNibble(nibble);            // give bytes 0-3 to pushNibble
 delay_micro(100);
 }
 
 
 
 void commandWrite(uint8_t command){
-    P2OUT &= ~BIT4;
+    P2OUT &= ~BIT4;               //set RS to 0
     pushByte (command);
 }
 
 
 
 void dataWrite(uint8_t data){
-    P2OUT |= BIT4;
+    P2OUT |= BIT4;          //Set RS to 1
     pushByte (data);
 }

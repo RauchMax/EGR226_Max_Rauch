@@ -86,7 +86,7 @@ void Scroll(void){
                 j++;
                 //m++;
 
-                delay_ms(700);
+                delay_ms(500);
                 commandWrite(0x80);
                 delay_micro(100);
                 //LCD_init();
@@ -115,7 +115,7 @@ void Scroll(void){
                 a++;
                 //m++;
                 n--;
-                delay_ms(700);
+                delay_ms(500);
                 commandWrite(n);
                 delay_micro(100);
 
@@ -129,6 +129,9 @@ void Scroll(void){
                 m=0;
                 j=0;
                 i=0;
+                commandWrite(144);
+                delay_micro(100);
+                dataWrite(0x20);
                 commandWrite(0x80);
                 delay_micro(100);
 
