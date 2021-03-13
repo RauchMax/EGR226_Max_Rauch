@@ -4,12 +4,8 @@
 * Date: 03/2/2021
 * Project: Lab Seven Part One
 * File: Main.c
-* Description: This program reads a standard twelve key keypad
-* and prints a four digit code to the screen with the press of
-* the pound key. It does not count the * as a valid digit. If less
-* than four valid digits are entered it asks for four digits. It
-* should be able to accept many digits and just print the last four.
-*  It will not print multiple numbers if the button is held down.
+* Description: This program sets up and initializes a standard 4x16
+* LCD. It sets the cursor to the first position and sits there blinking.
 **************************************************************************************/
 
 #include "msp.h"
@@ -65,7 +61,12 @@ void main(void)
 	}
 }
 
-
+/****| LCD_initFunction | *****************************************
+* Brief: This function initializes the LCD
+* param: N/A
+* data: N/A
+* return:N/A
+*************************************************************/
 
 void LCD_init(void){      //following the start up sequence
 
@@ -91,7 +92,12 @@ void LCD_init(void){      //following the start up sequence
 
 
 
-
+/****| SysTick_InitFunction | *****************************************
+* Brief: This function initializes the Systick timer
+* param: N/A
+* data: N/A
+* return:N/A
+*************************************************************/
 
 void SysTick_Init (void) //initialization of systic timer
 {
@@ -103,6 +109,14 @@ SysTick -> CTRL = 0x00000005; // enable systic, 3MHz, No
 }
 
 
+/****| delay_microFunction | *****************************************
+* Brief: This function creates a delay for a selected
+* number of microseconds.
+* param: N/A
+* data: Accept one variable called microsecond that is used
+* to calculate the delay.
+* return:N/A
+*************************************************************/
 
 void delay_micro(uint32_t microsecond)
 {
@@ -113,6 +127,15 @@ while((SysTick -> CTRL & 0x00010000) == 0);
 
 
 
+/****| delay_msFunction | *****************************************
+* Brief: This function creates a delay for a selected
+* number of milliseconds.
+* param: N/A
+* data: Accept one variable called ms that is used
+* to calculate the delay.
+* return:N/A
+*************************************************************/
+
 void delay_ms(unsigned ms)
 {
 SysTick -> LOAD = (ms*3000 - 1); // delay*3000
@@ -121,6 +144,13 @@ while((SysTick -> CTRL & 0x00010000) == 0);
 }
 
 
+/****| PulseEnablePinFunction | *****************************************
+* Brief: This function sets the E pin low, then sets it to
+* high for 10 microseconds, then sets it back to low.
+* param: N/A
+* data: N/A
+* return:N/A
+*************************************************************/
 
 void PulseEnablePin (void)
 {
@@ -133,6 +163,15 @@ delay_micro(10);
 }
 
 
+/****| pushNibbleFunction | *****************************************
+* Brief: This function takes an 8 bit number and clears the
+* first 4 bits. It then sets the d4-d7 pins equal to the least
+* significant 4 bits.
+* param: N/A
+* data: Accepts one variable named nibble that has half of the
+* data or command on it.
+* return:N/A
+*************************************************************/
 
 void pushNibble (uint8_t nibble)
 {
@@ -142,6 +181,17 @@ PulseEnablePin();               // pulse the E pin
 }
 
 
+/****| pushByteFunction | *****************************************
+* Brief: This function takes an 8 bit number and clears the
+* last 4 bits then shifts the bits to the right by 4. It then
+* calls pushNibble and sends it this number. Then it sets nibble
+* equal to the last 4 digits of the original number and sends
+* this number to pushNibble.
+* param: N/A
+* data: Accepts one variable named byte that has the data or
+* command on it.
+* return:N/A
+*************************************************************/
 
 void pushByte (uint8_t byte)
 {
@@ -154,6 +204,13 @@ delay_micro(100);
 }
 
 
+/****| commandWriteFunction | *****************************************
+* Brief: This function sets the RS pin to 0 for command.
+* Then it calls pushByte and passes it the command.
+* param: N/A
+* data: Accepts one variable that contains the command.
+* return:N/A
+*************************************************************/
 
 void commandWrite(uint8_t command){
     P2OUT &= ~BIT4;               //set RS to 0
@@ -161,6 +218,15 @@ void commandWrite(uint8_t command){
 }
 
 
+/****| dataWriteFunction | *****************************************
+* Brief: This function sets the RS pin to 1 for write.
+* Then it calls pushByte and passes it the data that needs
+* to be written.
+* param: N/A
+* data: Accepts one variable that contains the data that
+* needs to be written.
+* return:N/A
+*************************************************************/
 
 void dataWrite(uint8_t data){
     P2OUT |= BIT4;          //Set RS to 1

@@ -26,8 +26,9 @@ void main(void)
     P1->DIR = BIT0;
 
     //Temporary variable for for loop maintenance
-    int i,j;
+    int i,j,x;
     //scanf("%d", &j);
+    //j = x*2;
     while(1){
         P1->OUT ^= BIT0;      //toggle LED status
         for(i=j; i>0; i--);  //Crude delay

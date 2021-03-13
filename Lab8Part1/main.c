@@ -23,7 +23,7 @@ void main(void)
 	    while ( (SysTick -> CTRL & 0x00010000) == 0); // wait for flag to be SET
 	    P2OUT &= ~BIT3;
 	    //SysTick_delay((100-DC));
-	    SysTick -> LOAD = (((10-DC) * 3000) - 1); //delay for 1 msecond per delay value
+	    SysTick -> LOAD = (((100-DC) * 3000) - 1); //delay for 1 msecond per delay value
 	    SysTick -> VAL = 0; // any write to CVR clears it
 	    while ( (SysTick -> CTRL & 0x00010000) == 0); // wait for flag to be SET
 
