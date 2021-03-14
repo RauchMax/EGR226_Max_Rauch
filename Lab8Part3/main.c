@@ -165,11 +165,11 @@ void changeSpeed(void){
         }
 
         if(num == 12){
-            DC = 10000;
+            DC = 0;
         }
 
         if(num == 10){
-            DC = 10000;
+            DC = 0;
         }
 
 

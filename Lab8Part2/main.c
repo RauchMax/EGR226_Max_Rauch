@@ -1,21 +1,16 @@
 #include "msp.h"
 
 
-
-
 void main(void)
 {
 	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
 
 	// Configure GPIO for PWM output
-     //P5->DIR |= BIT6;    // P2.4 set TA0.1
      P5->SEL0 |= BIT6;
      P5->SEL1 &= ~(BIT6);
      P5->DIR |= BIT6;    // P2.4 set TA0.1
 
 	int DC,input;
-
-	//pwm_init(DC);
 
 
 	TIMER_A2->CCR[0] = (10000 - 1);
