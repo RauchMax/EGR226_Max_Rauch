@@ -140,7 +140,7 @@ void Scroll(void){
                 i=0;             // clear counter i
                 //commandWrite(144);
                 //delay_micro(100);
-                dataWrite(0x20);
+                //dataWrite(0x20);
                 commandWrite(0x80);   // set cursor back to the first position
                 delay_micro(100);
 
