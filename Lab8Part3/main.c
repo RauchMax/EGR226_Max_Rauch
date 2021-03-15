@@ -1,3 +1,15 @@
+/**************************************************************************************
+* Author: Max Rauch
+* Course: EGR 226 - 902
+* Date: 03/2/2021
+* Project: Lab Seven Part Two
+* File: Main.c
+* Description: This program prints MAX to the first row of a 4x16 LCD
+* centered. Then it prints RAUCH centered to the second row of the LCD.
+* It the prints EGR centered on the third row, and 226 centered on the
+* fourth row.
+**************************************************************************************/
+
 #include "msp.h"
 #include <stdio.h>
 
@@ -49,6 +61,14 @@ void main(void)
         }
 }
 
+
+/****| keypad_initFunction | *****************************************
+* Brief: This function initializes the LCD
+* param: N/A
+* data: N/A
+* return:N/A
+*************************************************************/
+
 void keypad_init (void)
 {
                                    //initialization of systic timer
@@ -71,6 +91,13 @@ void keypad_init (void)
 
 }
 
+
+/****| keypad_readFunction | *****************************************
+* Brief: This function initializes the LCD
+* param: N/A
+* data: N/A
+* return:N/A
+*************************************************************/
 
 uint8_t  Keypad_Read(void)
 {
@@ -102,6 +129,13 @@ return 1;
 }
 
 
+/****| Print_KeysFunction | *****************************************
+* Brief: This function initializes the LCD
+* param: N/A
+* data: N/A
+* return:N/A
+*************************************************************/
+
 void Print_Keys (void)
 {
         if(num < 10 ){           //if its 1-9 just print it
@@ -120,6 +154,13 @@ void Print_Keys (void)
 
 }
 
+
+/****| changespeedFunction | *****************************************
+* Brief: This function initializes the LCD
+* param: N/A
+* data: N/A
+* return:N/A
+*************************************************************/
 
 void changeSpeed(void){
     int DC;
@@ -178,7 +219,12 @@ void changeSpeed(void){
 
 }
 
-
+/****| SysTickinitFunction | *****************************************
+* Brief: This function initializes the LCD
+* param: N/A
+* data: N/A
+* return:N/A
+*************************************************************/
 
 void SysTick_delay (uint16_t delay)
 { // Systick delay function

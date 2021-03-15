@@ -1,3 +1,15 @@
+/**************************************************************************************
+* Author: Max Rauch
+* Course: EGR 226 - 902
+* Date: 03/2/2021
+* Project: Lab Seven Part Two
+* File: Main.c
+* Description: This program prints MAX to the first row of a 4x16 LCD
+* centered. Then it prints RAUCH centered to the second row of the LCD.
+* It the prints EGR centered on the third row, and 226 centered on the
+* fourth row.
+**************************************************************************************/
+
 #include "msp.h"
 
 
@@ -30,6 +42,12 @@ void main(void)
 	}
 }
 
+/****| SysTick_InitFunction | *****************************************
+* Brief: This function initializes the LCD
+* param: N/A
+* data: N/A
+* return:N/A
+*************************************************************/
 
 void SysTick_Init (void)
 {
@@ -47,18 +65,4 @@ void SysTick_Init (void)
     P2OUT |= BIT3;
 
 }
-/*
-void SysTick_delay (int delay)
-{
-    // Systick delay function
-SysTick -> LOAD = ((delay * 3000) - 1); //delay for 1 msecond per delay value
-SysTick -> VAL = 0; // any write to CVR clears it
-while ( (SysTick -> CTRL & 0x00010000) == 0); // wait for flag to be SET
-}
 
-
-void Test(int DC)
-{
-
-}
-*/
