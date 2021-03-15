@@ -1,13 +1,13 @@
 /**************************************************************************************
 * Author: Max Rauch
 * Course: EGR 226 - 902
-* Date: 03/2/2021
-* Project: Lab Seven Part Two
+* Date: 03/12/2021
+* Project: Lab Eight Part One
 * File: Main.c
-* Description: This program prints MAX to the first row of a 4x16 LCD
-* centered. Then it prints RAUCH centered to the second row of the LCD.
-* It the prints EGR centered on the third row, and 226 centered on the
-* fourth row.
+* Description: This program uses systick timer to create a pseudo-analog signal.
+* This program has a variable that is used to control the duty cycle of a dc
+* motor. The user has to pause the program then enter a number between 1-99. A
+* value of 10 represents a DC of .1 and a value of 90 represents a DC of .9.
 **************************************************************************************/
 
 #include "msp.h"
@@ -43,7 +43,7 @@ void main(void)
 }
 
 /****| SysTick_InitFunction | *****************************************
-* Brief: This function initializes the LCD
+* Brief: This function initializes the SysTick timer.
 * param: N/A
 * data: N/A
 * return:N/A
@@ -55,7 +55,7 @@ void SysTick_Init (void)
     SysTick -> CTRL = 0;             // disable SysTick During step
     SysTick -> LOAD = 0x00FFFFFF;   // max reload value
     SysTick -> VAL = 0;             // any write to current clears it
-    SysTick -> CTRL = 0x00000005;  // enable systic, 3MHz, No
+    SysTick -> CTRL = 0x00000005;  // enable systick, 3MHz, No
                                    //Interrupts
 
 

@@ -1,13 +1,15 @@
 /**************************************************************************************
 * Author: Max Rauch
 * Course: EGR 226 - 902
-* Date: 03/2/2021
-* Project: Lab Seven Part Two
+* Date: 03/12/2021
+* Project: Lab Eight Part Three
 * File: Main.c
-* Description: This program prints MAX to the first row of a 4x16 LCD
-* centered. Then it prints RAUCH centered to the second row of the LCD.
-* It the prints EGR centered on the third row, and 226 centered on the
-* fourth row.
+* Description: This program uses timer A to create a PWM signal that is used
+* to slow down or speed up a dc motor. The input for this program is from a
+* standard twelve key keypad. Pressing the 1 key will set the duty cycle to
+* .1, pressing the 2 will make the DC .2. This is true for 1-9, after that
+* pressing a 0 will turn the motor off or pressing * or # will set the motor
+* to full speed.
 **************************************************************************************/
 
 #include "msp.h"
@@ -15,8 +17,8 @@
 
 void keypad_init (void);                // prototype for GPIO initialization
 uint8_t  Keypad_Read(void);              // prototype for keypad scan function
-void Print_Keys (void);                 // Print Key pressed
 void changeSpeed(void);
+void timer_init(void);
 void SysTick_delay (uint16_t delay);   // prototyping the systick function
 uint8_t num, pressed;
 
@@ -31,39 +33,42 @@ void main(void)
      P5->SEL1 &= ~(BIT6);
      P5->DIR |= BIT6;    // P2.4 set TA0.1
 
-    //int DC,input;
+
      keypad_init ( );
-    //pwm_init(DC);
+     timer_init();
 
-
-    TIMER_A2->CCR[0] = (10000 - 1);
-    TIMER_A2->CCTL[1] = 0b0000000001110000;
-    TIMER_A2->CTL = 0b0000001000010100;
-
-
-
-/*
-    while(1){
-        DC = input*100;
-                TIMER_A2->CCR[1] = DC;           // CCR1 PWM duty cycle
-    }
-
-    */
 
     while ( 1 )
         {
         pressed =  Keypad_Read(); // Call Function to read Keypad
         if ( pressed )          //checking button state
-        Print_Keys ( );
         changeSpeed();
         SysTick_delay (10);    // 10ms delay through the loop before reading keypad again
-        //__delay_cycles(30000);
+
         }
 }
 
 
+/****| timer_initFunction | *****************************************
+* Brief: This function initializes the timer A. It sets timer
+* A to up mode, to use  SMCLK, the number of cycles to count
+* to, and reset/set mode.
+* param: N/A
+* data: N/A
+* return:N/A
+*************************************************************/
+
+void timer_init(void){
+    TIMER_A2->CCR[0] = (10000 - 1);
+    TIMER_A2->CCTL[1] = 0b0000000001110000;
+    TIMER_A2->CTL = 0b0000001000010100;
+}
+
+
+
 /****| keypad_initFunction | *****************************************
-* Brief: This function initializes the LCD
+* Brief: This function initializes the keypad pins and the
+* SysTick timer.
 * param: N/A
 * data: N/A
 * return:N/A
@@ -93,9 +98,14 @@ void keypad_init (void)
 
 
 /****| keypad_readFunction | *****************************************
-* Brief: This function initializes the LCD
+* Brief: This function reads the keypad and sets the global
+* variable num to the number that coincides with a 4x3 matrix.
+* It also returns a 0 if nothing was pressed or a 1 if a key
+* was pressed.
 * param: N/A
-* data: N/A
+* data: This is a void function so it has no input, but it
+* sets a global variable and returns a value of 1 or 0 which
+* is used to tell if a button has been pressed.
 * return:N/A
 *************************************************************/
 
@@ -129,34 +139,13 @@ return 1;
 }
 
 
-/****| Print_KeysFunction | *****************************************
-* Brief: This function initializes the LCD
-* param: N/A
-* data: N/A
-* return:N/A
-*************************************************************/
-
-void Print_Keys (void)
-{
-        if(num < 10 ){           //if its 1-9 just print it
-            printf("%d\n", num);
-    }
-
-    if(num == 10){             //if its 10 print the *
-        printf("*\n");
-    }
-    if(num == 11){            // if its 11 print 0
-        printf("0\n");
-    }
-    if(num == 12){            // if its 12 print #
-            printf("#\n");
-    }
-
-}
 
 
 /****| changespeedFunction | *****************************************
-* Brief: This function initializes the LCD
+* Brief: This function takes the input from the keypad and uses
+* it to set the duty cycle variable to the required duty cycle
+* for that specific key. Then it changes timer A2 CCR1 to that
+* duty cycle.
 * param: N/A
 * data: N/A
 * return:N/A
@@ -219,10 +208,12 @@ void changeSpeed(void){
 
 }
 
-/****| SysTickinitFunction | *****************************************
-* Brief: This function initializes the LCD
+/****| SysTick_delayFunction | *****************************************
+* Brief: This function delays the program for 1 millisecond
+* per value of the variable.
 * param: N/A
-* data: N/A
+* data: This function accepts one variable called delay that
+* is used to set the load register.
 * return:N/A
 *************************************************************/
 

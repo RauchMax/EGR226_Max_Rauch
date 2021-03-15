@@ -1,13 +1,15 @@
 /**************************************************************************************
 * Author: Max Rauch
 * Course: EGR 226 - 902
-* Date: 03/2/2021
-* Project: Lab Seven Part Two
+* Date: 03/12/2021
+* Project: Lab Eight Part Two
 * File: Main.c
-* Description: This program prints MAX to the first row of a 4x16 LCD
-* centered. Then it prints RAUCH centered to the second row of the LCD.
-* It the prints EGR centered on the third row, and 226 centered on the
-* fourth row.
+* Description: This program uses timer A to create a PWM signal that is used
+* to slow down or speed up a dc motor. The program needs to be paused and the
+* input variable needs to be changed. This variable controlls the time off so
+* a value of 90 is a duty cycle of .1 and a value of 10 is a duty cycle of .9.
+* The input variable can take input from 0 to 100, 0 being full speed and 100
+* being off.
 **************************************************************************************/
 
 #include "msp.h"
@@ -25,11 +27,7 @@ void main(void)
 
 	int DC,input;
 
-/*
-	TIMER_A2->CCR[0] = (10000 - 1);
-	TIMER_A2->CCTL[1] = 0b0000000001110000;
-	TIMER_A2->CTL = 0b0000001000010100;
-*/
+
 	timer_init();
 
 
@@ -42,7 +40,9 @@ void main(void)
 }
 
 /****| timer_initFunction | *****************************************
-* Brief: This function initializes the LCD
+* Brief: This function initializes the timer A. It sets timer
+* A to up mode, to use  SMCLK, the number of cycles to count
+* to, and reset/set mode.
 * param: N/A
 * data: N/A
 * return:N/A
