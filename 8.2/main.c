@@ -18,25 +18,25 @@ void timer_init(void);   //prototyping the Timer A initialization
 
 void main(void)
 {
-	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
+    WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;     // stop watchdog timer
 
-	                        // Configure GPIO for PWM output
+                            // Configure GPIO for PWM output
      P5->SEL0 |= BIT6;
      P5->SEL1 &= ~(BIT6);
      P5->DIR |= BIT6;     // set P5.6 to output
 
-	int DC,input;       // making duty cycle and input variables
+    int DC,input;       // making duty cycle and input variables
 
 
-	timer_init();    //initializing the timer A
+    timer_init();    //initializing the timer A
 
 
 
-	while(1){
-	    DC = input*100;       //setting duty cycle based on input
+    while(1){
+        DC = input*100;       //setting duty cycle based on input
 
-	    TIMER_A2->CCR[1] = DC;           // CCR1 PWM duty cycle with DC
-	}
+        TIMER_A2->CCR[1] = DC;           // CCR1 PWM duty cycle with DC
+    }
 }
 
 /****| timer_initFunction | *****************************************

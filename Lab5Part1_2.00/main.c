@@ -17,6 +17,8 @@ int counter =1;   //setting counter = to 1 so the program starts with green
 void init(void);         // prototyping the initialization function
 void forward(void);    // prototyping the forward function
 
+
+
 int main(void)
 {
 
@@ -68,3 +70,7 @@ void forward(void){
         }
 
 }
+
+
+
+
