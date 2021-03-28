@@ -13,8 +13,12 @@
 #include "msp.h"
 #include <stdio.h>
 
+
+void SetupLEDs(void);
+void SetupPort5Interrupts (void);
 void adcsetup(void);
 void print(void);
+void printF(void);
 
 void LCD_init(void);                   // This is the initialization sequence
 void delay_micro(unsigned microsec); // SysTick timer generate delay in microseconds.
@@ -38,7 +42,7 @@ void dataWrite(uint8_t data);           // Writing one byte of DATA by calling t
 char name[20] = {'C','u','r','r','e','n','t',' ','T','e','m','p','.',' ','i','s'};
                                    //making one string to print to the screen
 
-int result;
+int result,flag=1;
 float volt,tempC,tempF;
 
 void main(void)
@@ -67,6 +71,11 @@ void main(void)
 
     int i=0;
 
+    SetupLEDs ( );                              //Sets up the LED as outputs
+    SetupPort5Interrupts ( );                  //Initializes buttons that interrupt program
+    NVIC->ISER[1] = 1 << ((PORT5_IRQn) & 31);  // Enable Port 5 interrupt on the NVIC
+    __enable_interrupt ( );                   //Enable all interrupts that are turned on
+
 
     commandWrite(0x80); // changing the cursor to the 1st position in the first row
     delay_micro(100);
@@ -87,14 +96,19 @@ void main(void)
                 //printf ("Voltage is:\t%.3f\n", volt);
                 tempC =(volt-.500)/.010;
                 tempF =(tempC*(9.0/5.0))+32.0;
-                printf ("Voltage is:\t%.3f degrees C\n", tempC);
+                //printf ("Voltage is:\t%.3f degrees C\n", tempC);
                 //printf ("Voltage is:\t%.3f degrees F\n\n", tempF);
                 delay_ms(1000);                        // wait for next value- using Systick function
 
                 commandWrite(0x96);
                 delay_micro(100);
 
-                print();
+                if(flag==0){
+                    print();
+                }
+                if(flag==1){
+                    printF();
+                }
 
 
     }
@@ -129,6 +143,40 @@ void LCD_init(void){    //following the start up sequence
 
 }
 
+
+/****| SetupLEDs Function | *****************************************
+* Brief: This function initializes red LED built into the MSP432.
+* param: N/A
+* data: N/A
+* return:N/A
+*************************************************************/
+
+void SetupLEDs(void) {
+
+    P1->DIR = BIT0;      //setting direction to output
+    P1->OUT |= BIT0;    //turning the LED on
+}
+
+
+/****| SetupPort5Interrupts Function | *****************************************
+* Brief: This function initializes P5.1, P5.2, and P5.4 as input
+* whith the pull up resistors. It also sets them so the interrupts
+* is triggered when the pin goes from high to low.
+* param: N/A
+* data: N/A
+* return:N/A
+*************************************************************/
+
+void SetupPort5Interrupts (void) {
+P5->SEL0 &=~ BIT1;                        // Setup the P5.1 on the Launchpad as Input, Pull Up Resistor
+P5->SEL1 &=~ BIT1;
+P5->DIR &=~ BIT1;
+P5->REN |= BIT1;
+P5->OUT |= BIT1;                        //Input, Pull Up Resistor
+P5->IES |= BIT1;                        //Set pin interrupt to trigger from high to low (starts high due to pull up resistor)
+P5->IE |= BIT1;                         //Set interrupt on for P5.1
+P5->IFG = 0;                             //Clear all Port 5 interrupt flags
+}
 
 
 /****| SysTick_InitFunction | *****************************************
@@ -304,4 +352,68 @@ void print(void){
 
     dataWrite(0x43);
     delay_ms(10);
+}
+
+
+void printF(void){
+    int j;
+    char temp[4];
+
+    sprintf(temp,"%.1f",tempF);
+
+
+    for(j=0;j<4;j++){
+        dataWrite(temp[j]);  //print the ith letter to the screen
+        delay_ms(10);
+    }
+
+    dataWrite(0xdf);
+    delay_ms(10);
+
+    dataWrite(0x46);
+    delay_ms(10);
+}
+
+
+/****| PORT5_IRQHandler Handler | *****************************************
+* Brief: This handler checks to see which button caused the interrupt,
+* then it checks to see of the button is pressed, pauses and checks
+* again to debounce the button. It then sits in a wile statement if
+* the button is being held. If the signal was from button 1 it increments
+* DC by 10%, if the signal was from button 2 it decrements the DC by
+* 10% and if the signal was from button 3 it turns the motor off. It also
+* toggles the LED everytime a button is pressed for visual of the interrupt.
+* param: N/A
+* data: N/A
+* return:N/A
+*************************************************************/
+
+void PORT5_IRQHandler(void) {
+if(P5->IFG & BIT1){
+    if((P5IN & BIT1) == 0x00){                      //If P5.1 had an interrupt (comparing the status with the BIT)
+        delay_ms (50);
+        if((P5IN & BIT1) == 0x00){
+            if((P5IN & BIT1) == 0x00){                      //If P5.1 had an interrupt (comparing the status with the BIT)
+                delay_ms (50);
+                    if((P5IN & BIT1) == 0x00){
+                    while((P5IN & BIT1) == 0x00);          // if it is being held just wait here
+
+                    }
+                    }
+
+          if(flag==0){
+              flag = 0;
+              P1->OUT ^= BIT0;                 //toggle LED
+          }
+          if(flag==1){
+              flag = -1;
+              P1->OUT ^= BIT0;                 //toggle LED
+          }
+
+}
+}
+}
+
+flag++;
+P5->IFG = 0;                              //Clear all flags
 }
