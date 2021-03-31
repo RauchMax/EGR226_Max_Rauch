@@ -1,13 +1,13 @@
 /**************************************************************************************
 * Author: Max Rauch
 * Course: EGR 226 - 902
-* Date: 03/2/2021
-* Project: Lab Seven Part Two
+* Date: 03/24/2021
+* Project: Lab Ten Part Three
 * File: Main.c
-* Description: This program prints MAX to the first row of a 4x16 LCD
-* centered. Then it prints RAUCH centered to the second row of the LCD.
-* It the prints EGR centered on the third row, and 226 centered on the
-* fourth row.
+* Description: This program prints "Current Temp. is" on the first line
+* and then displays the temperature centered on the third line. It starts
+* by showing the temp in C but that can be changed by pushing a button. The
+* program will then show the temp in F.
 **************************************************************************************/
 
 #include "msp.h"
@@ -19,41 +19,30 @@ void SetupPort5Interrupts (void);
 void adcsetup(void);
 void print(void);
 void printF(void);
-
-void LCD_init(void);                   // This is the initialization sequence
-void delay_micro(unsigned microsec); // SysTick timer generate delay in microseconds.
-void delay_ms(unsigned ms);          // SysTick timer generate a delay in
-                                    //milliseconds.
+void LCD_init(void);
+void delay_micro(unsigned microsec);
+void delay_ms(unsigned ms);
+void delay_mili(unsigned ms);
 void SysTick_Init (void);
-void PulseEnablePin(void);         // This function will sequence the Enable (E) pin
-void pushNibble(uint8_t nibble);       // This function pushes 1 nibble onto the data
-                                       // pins and pulses the Enable pin
+void PulseEnablePin(void);
+void pushNibble(uint8_t nibble);
 void pushByte(uint8_t byte);
-                                         // This function first pushes the most significant 4 bits of the
-                                       // byte onto the data pins by calling the pushNibble() function.
-                                      // Next, it pushes the least significant 4 bits onto the data pins
-                                      // by calling the pushNibble() function
-void commandWrite(uint8_t command);    // Writing one byte of command by calling the
-                                        // pushByte() function with the command
-                                        //parameter
-void dataWrite(uint8_t data);           // Writing one byte of DATA by calling the
-                                          // pushByte() function with the
-                                         //data parameter
+void commandWrite(uint8_t command);
+void dataWrite(uint8_t data);
+
+
 char name[20] = {'C','u','r','r','e','n','t',' ','T','e','m','p','.',' ','i','s'};
                                    //making one string to print to the screen
 
-int result,flag=1;
+int result;
+volatile int flag=0;
 float volt,tempC,tempF;
 
 void main(void)
 {
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;     // stop watchdog timer
 
-         //P3SEL0 &= ~0x06;
-         //P3SEL1 &= ~0x06;  //  configure P4.2 & 4.3  GPIO
-         //P3DIR |= 0x06;   //  make P4.2 & 4.3 output
-         //P3OUT &= ~0x06;
-         //P3OUT |= BIT3;
+
 
         P2SEL0 &= ~0x30;
         P2SEL1 &= ~0x30;  //  configure P2.4 & P2.5 GPIO
@@ -92,18 +81,18 @@ void main(void)
                 while(!ADC14->IFGR0);                  // wait until conversion complete
                 result = ADC14->MEM[5];                // immediately store value in a variable
                 //printf ("Value is:\t%d\n", result);
-                volt = result*.0002;
+                volt = result*.0002;                   //calculating voltage
                 //printf ("Voltage is:\t%.3f\n", volt);
-                tempC =(volt-.500)/.010;
-                tempF =(tempC*(9.0/5.0))+32.0;
+                tempC =(volt-.500)/.010;                //calculating Celcius
+                tempF =(tempC*(9.0/5.0))+32.0;          //calculating Fehrenheit
                 //printf ("Voltage is:\t%.3f degrees C\n", tempC);
                 //printf ("Voltage is:\t%.3f degrees F\n\n", tempF);
                 delay_ms(1000);                        // wait for next value- using Systick function
 
-                commandWrite(0x96);
+                commandWrite(0x96);                   //moving cursor to 7th spot on 3rd row
                 delay_micro(100);
 
-                if(flag==0){
+                if(flag==0){                         //checking to print c or f
                     print();
                 }
                 if(flag==1){
@@ -230,6 +219,22 @@ while((SysTick -> CTRL & 0x00010000) == 0);
 }
 
 
+/****| delay_miliFunction | *****************************************
+* Brief: This function creates a delay for a selected
+* number of milliseconds.
+* param: N/A
+* data: Accept one variable called ms that is used
+* to calculate the delay.
+* return:N/A
+*************************************************************/
+
+void delay_mili(unsigned ms)
+{
+SysTick -> LOAD = (ms*3000 - 1); // delay*3000
+SysTick -> VAL = 0; //clears counter
+while((SysTick -> CTRL & 0x00010000) == 0);
+}
+
 /****| PulseEnablePinFunction | *****************************************
 * Brief: This function sets the E pin low, then sets it to
 * high for 10 microseconds, then sets it back to low.
@@ -321,6 +326,16 @@ void dataWrite(uint8_t data){
 }
 
 
+
+/****| adcsetupFunction| *****************************************
+* Brief: This function initializes the ADC to use MCLK, 14 bit
+* resolution, A0 input and pin 5.5.
+* param: N/A
+* data: N/A
+* return:N/A
+*************************************************************/
+
+
 void adcsetup(void)
 {
 ADC14->CTL0 = 0x00000010;             //power on and disabled during configuration
@@ -335,42 +350,60 @@ ADC14->CTL0 |= 2;                   //enable ADC after configuration
 }
 
 
+/****| printFunction| *****************************************
+* Brief: This function moves the value of tempC into he string
+* temp and then prints that string to the LCD screen. It then
+* prints the degree symbol followed by C.
+* param: N/A
+* data: N/A
+* return:N/A
+*************************************************************/
+
 void print(void){
     int j;
     char temp[4];
 
-    sprintf(temp,"%.1f",tempC);
+    sprintf(temp,"%.1f",tempC);     //moving tempc into temp string
 
 
     for(j=0;j<4;j++){
-        dataWrite(temp[j]);  //print the ith letter to the screen
+        dataWrite(temp[j]);        //print the ith letter to the screen
         delay_ms(10);
     }
 
-    dataWrite(0xdf);
+    dataWrite(0xdf);              //printing the degree symbol
     delay_ms(10);
 
-    dataWrite(0x43);
+    dataWrite(0x43);             //print a capital c
     delay_ms(10);
 }
 
+
+/****| printF_Function| *****************************************
+* Brief: This function moves the value of tempF into he string
+* temp and then prints that string to the LCD screen. It then
+* prints the degree symbol followed by F.
+* param: N/A
+* data: N/A
+* return:N/A
+*************************************************************/
 
 void printF(void){
     int j;
     char temp[4];
 
-    sprintf(temp,"%.1f",tempF);
+    sprintf(temp,"%.1f",tempF);  //moving tempf into temp string
 
 
     for(j=0;j<4;j++){
-        dataWrite(temp[j]);  //print the ith letter to the screen
+        dataWrite(temp[j]);      //print the ith letter to the screen
         delay_ms(10);
     }
 
-    dataWrite(0xdf);
+    dataWrite(0xdf);           //printing the degree symbol
     delay_ms(10);
 
-    dataWrite(0x46);
+    dataWrite(0x46);          //print a capital f
     delay_ms(10);
 }
 
@@ -379,10 +412,9 @@ void printF(void){
 * Brief: This handler checks to see which button caused the interrupt,
 * then it checks to see of the button is pressed, pauses and checks
 * again to debounce the button. It then sits in a wile statement if
-* the button is being held. If the signal was from button 1 it increments
-* DC by 10%, if the signal was from button 2 it decrements the DC by
-* 10% and if the signal was from button 3 it turns the motor off. It also
-* toggles the LED everytime a button is pressed for visual of the interrupt.
+* the button is being held. It then checks the value of flag and changes
+* it so when it is incremented it will be the opposite of what it is
+* now.
 * param: N/A
 * data: N/A
 * return:N/A
@@ -391,10 +423,10 @@ void printF(void){
 void PORT5_IRQHandler(void) {
 if(P5->IFG & BIT1){
     if((P5IN & BIT1) == 0x00){                      //If P5.1 had an interrupt (comparing the status with the BIT)
-        delay_ms (50);
+        delay_mili (50);
         if((P5IN & BIT1) == 0x00){
             if((P5IN & BIT1) == 0x00){                      //If P5.1 had an interrupt (comparing the status with the BIT)
-                delay_ms (50);
+                delay_mili (50);
                     if((P5IN & BIT1) == 0x00){
                     while((P5IN & BIT1) == 0x00);          // if it is being held just wait here
 
@@ -402,11 +434,11 @@ if(P5->IFG & BIT1){
                     }
 
           if(flag==0){
-              flag = 0;
+              flag = 0;                          //setting flag to 0 so when it is incremented it becomes 1
               P1->OUT ^= BIT0;                 //toggle LED
           }
           if(flag==1){
-              flag = -1;
+              flag = -1;                       //setting flag to -1 so when it is incremented it becomes 0
               P1->OUT ^= BIT0;                 //toggle LED
           }
 
